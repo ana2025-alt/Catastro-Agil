@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso | Catastro Ágil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- FONDO ANIMADO --- */
+        @keyframes moverFondo {
+            0% { background-position: 0% 0%; background-size: 100%; }
+            100% { background-position: 100% 100%; background-size: 120%; }
+        }
+
+        .fondo-login {
+            background-color: #0f172a;
+            background-image: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.95)), url('/img/login-bg.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            animation: moverFondo 30s alternate infinite ease-in-out;
+            overflow: hidden;
+        }
+
+        @keyframes spin { 
+            from { transform: rotate(0deg); } 
+            to { transform: rotate(360deg); } 
+        }
+        .animate-spin-slow { animation: spin 15s linear infinite; }
+        
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Efecto sutil para la imagen insertada */
+        .img-overlay {
+            box-shadow: inset 0 0 50px rgba(15, 23, 42, 0.8);
+        }
+    </style>
+</head>
+<body class="fondo-login min-h-screen flex flex-col items-center justify-center text-slate-200 p-4 lg:p-8 relative">
+
+    <!-- Canvas de partículas -->
+    <canvas id="canvasParticulas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- CONTENEDOR PRINCIPAL DIVIDIDO (GRID) -->
+    <div class="glass-panel w-full max-w-5xl rounded-2xl shadow-2xl border border-white/10 relative z-10 overflow-hidden flex flex-col md:flex-row">
+        
+        <!-- COLUMNA IZQUIERDA: IMAGEN (Se oculta en móviles) -->
+        <div class="hidden md:block md:w-1/2 relative bg-slate-900 border-r border-white/10 img-overlay">
+            <!-- Capa oscura semitransparente sobre la imagen para que combine con el tema dark -->
+            <div class="absolute inset-0 bg-slate-900/40 z-10"></div>
+            <!-- REEMPLAZA LA RUTA AQUÍ SI LE PUSISTE OTRO NOMBRE A TU IMAGEN -->
+            <img src="/img/planos-catastro.jpg" alt="Planos Catastrales" class="w-full h-full object-cover relative z-0 mix-blend-luminosity opacity-80">
+            
+            <!-- Texto decorativo sobre la imagen -->
+            <div class="absolute bottom-8 left-8 z-20">
+                <p class="text-cyan-400 font-mono text-xs uppercase tracking-widest mb-1"><i class="fa-solid fa-satellite mr-2"></i>Conexión Segura</p>
+                <h3 class="text-white font-black text-2xl drop-shadow-lg">Registro de <br>Propiedad Digital</h3>
+            </div>
+        </div>
+
+        <!-- COLUMNA DERECHA: FORMULARIO DE LOGIN -->
+        <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+            
+            <div class="text-center mb-10">
+                <div class="flex justify-center items-center gap-6 mb-4">
+                    <i class="fa-solid fa-house text-cyan-400 text-3xl drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]"></i>
+                    <i class="fa-solid fa-earth-americas text-blue-400 text-3xl animate-spin-slow drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]"></i>
+                </div>
+                <h1 class="text-3xl font-black uppercase tracking-widest text-white">CATASTRO <span class="text-cyan-400">ÁGIL</span></h1>
+                <p class="text-slate-400 text-xs mt-2 font-mono">Bóveda de Resguardo Territorial</p>
+            </div>
+
+            <form id="loginForm" class="space-y-6 max-w-sm mx-auto w-full">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-400 mb-1.5">Correo Electrónico</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-envelope absolute left-3 top-3.5 text-slate-500 text-sm"></i>
+                        <input type="email" id="email" required placeholder="ejemplo@dominio.com" class="w-full bg-slate-950/50 border border-slate-700 rounded-lg pl-9 pr-3 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition">
+                    </div>
+                </div>
+
+                <div>
+                    <!-- El "Olvidó su clave" ya está quitado -->
+                    <label class="block text-xs font-bold uppercase text-slate-400 mb-1.5">Clave de Acceso</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute left-3 top-3.5 text-slate-500 text-sm"></i>
+                        <input type="password" id="password" required placeholder="••••••••" class="w-full bg-slate-950/50 border border-slate-700 rounded-lg pl-9 pr-3 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition">
+                    </div>
+                </div>
+                
+                <button type="submit" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black uppercase tracking-wider py-3.5 rounded-lg shadow-[0_0_15px_rgba(6,182,212,0.3)] transition active:scale-95 flex justify-center items-center gap-2 text-sm mt-4">
+                    <i class="fa-solid fa-fingerprint"></i> Autenticar Acceso
+                </button>
+            </form>
+
+            <div class="mt-8 pt-6 border-t border-slate-800 text-center">
+                <button onclick="toggleModal(true)" class="text-xs text-cyan-400 hover:underline transition">
+                    <i class="fa-solid fa-user-plus mr-1"></i> ¿Cliente nuevo? Registrarse aquí
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Registro (Queda igual) -->
+    <div id="registerModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-md p-6 rounded-2xl text-white space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="font-bold text-lg text-cyan-400"><i class="fa-solid fa-user-plus mr-2"></i>Nuevo Registro</h3>
+                <button onclick="toggleModal(false)" class="text-slate-400 hover:text-white text-xl">&times;</button>
+            </div>
+            <form id="registerForm" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">Cédula</label>
+                    <input type="text" id="regCedula" required pattern="[0-9]+" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-cyan-400 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">Nombre Completo</label>
+                    <input type="text" id="regNombre" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-cyan-400 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">Correo Electrónico</label>
+                    <input type="email" id="regEmail" required placeholder="correo@dominio.com" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-cyan-400 outline-none">
+                </div>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 font-bold py-2 rounded-lg text-sm mt-3 transition">
+                    Guardar Cliente en Bóveda
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="fixed bottom-6 text-center w-full z-10">
+        <p class="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+            Sistema de Resguardo Territorial v1.0.0 &copy; 2026
+        </p>
+    </div>
+
+    <!-- Script de Partículas -->
+    <script>
+        (function() {
+            const canvas = document.getElementById('canvasParticulas');
+            const ctx = canvas.getContext('2d');
+
+            function ajustarTamano() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            ajustarTamano();
+            window.addEventListener('resize', ajustarTamano);
+
+            const imagenes = [];
+            let imagenesCargadas = 0;
+
+            function comprobarCarga() {
+                imagenesCargadas++;
+                if (imagenesCargadas === 2) iniciarAnimacion();
+            }
+
+            const imgCasa = new Image();
+            imgCasa.onload = comprobarCarga;
+            imgCasa.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwNmI2ZDQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMCA5bDktNyA5IDd2MTFhMiAyIDAgMCAxLTIgMkg1YTIgMiAwIDAgMS0yLTJ6Ij48L3BhdGg+PHBvbHlsaW5lIHBvaW50cz0iOSAyMiA5IDEyIDE1IDEyIDE1IDIyIj48L3BvbHlsaW5lPjwvc3ZnPg==";
+            imagenes.push(imgCasa);
+
+            const imgPlano = new Image();
+            imgPlano.onload = comprobarCarga;
+            imgPlano.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzOGJkZjgiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSIzIiB5PSIzIiB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHJ4PSIyIj48L3JlY3Q+PHBhdGggZD0iTTMgOWgxOE05IDIxdjlNMISTUgOXYxMiI+PC9wYXRoPjwvc3ZnPg==";
+            imagenes.push(imgPlano);
+
+            const cantidadParticulas = 25;
+            const particulas = [];
+
+            class Particula {
+                constructor() {
+                    this.reset();
+                    this.y = Math.random() * canvas.height;
+                }
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = canvas.height + 40;
+                    this.velocidadY = 0.3 + Math.random() * 0.5;
+                    this.velocidadX = (Math.random() - 0.5) * 0.3;
+                    this.tamano = 16 + Math.random() * 16;
+                    this.opacidad = 0.15 + Math.random() * 0.35;
+                    this.imagen = imagenes[Math.floor(Math.random() * imagenes.length)];
+                }
+                actualizar() {
+                    this.y -= this.velocidadY;
+                    this.x += this.velocidadX;
+                    if (this.y < -40) this.reset();
+                }
+                dibujar() {
+                    ctx.globalAlpha = this.opacidad;
+                    ctx.drawImage(this.imagen, this.x, this.y, this.tamano, this.tamano);
+                }
+            }
+
+            function iniciarAnimacion() {
+                for (let i = 0; i < cantidadParticulas; i++) particulas.push(new Particula());
+                function animar() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    particulas.forEach(p => { p.actualizar(); p.dibujar(); });
+                    requestAnimationFrame(animar);
+                }
+                animar();
+            }
+        })();
+    </script>
+
+    <!-- Tu Lógica JS de Validación -->
+    <script>
+        function validarCorreoEstricto(correo) {
+            const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$/;
+            return regex.test(correo);
+        }
+
+        function toggleModal(show) {
+            document.getElementById('registerModal').classList.toggle('hidden', !show);
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            if (!validarCorreoEstricto(email)) {
+                alert("❌ ACCESO DENEGADO: Formato de correo inválido.");
+                return;
+            }
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ email })
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    localStorage.setItem('usuario_id', data.usuario_id);
+                    localStorage.setItem('usuario_nombre', data.nombre);
+                    window.location.href = 'index.html';
+                } else {
+                    alert("❌ ERROR: " + data.message);
+                }
+            } catch (err) {
+                alert("Error de conexión.");
+            }
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const cedula = document.getElementById('regCedula').value.trim();
+            const nombre = document.getElementById('regNombre').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+
+            if (!validarCorreoEstricto(email)) {
+                alert("❌ REGISTRO DENEGADO: El correo debe terminar en '.com'.");
+                return;
+            }
+            try {
+                const res = await fetch('/api/registrar-cliente', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ cedula, nombre, email })
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    alert("✅ ¡Cliente registrado!");
+                    toggleModal(false);
+                } else {
+                    alert("❌ ERROR: " + data.message);
+                }
+            } catch (err) {
+                alert("Error de red.");
+            }
+        });
+    </script>
+</body>
+</html> 
