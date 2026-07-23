@@ -1,0 +1,22 @@
+/* Efecto de movimiento lento (paneo y zoom) */
+@keyframes moverFondo {
+    0% { background-position: 0% 0%; background-size: 100%; }
+    100% { background-position: 100% 100%; background-size: 120%; }
+}
+
+.fondo-login {
+    background-color: #0f172a;
+    background-image: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.95)), url('/img/login-bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    animation: moverFondo 30s alternate infinite ease-in-out;
+    overflow: hidden; 
+}
+
+.fondo-banner {
+    background-color: #0f172a;
+    background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url('/img/hero-bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    animation: moverFondo 30s alternate infinite ease-in-out;
+} 
