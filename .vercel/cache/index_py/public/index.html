@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catastro Ágil | Bóveda Principal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Animación para el banner */
+        @keyframes moverFondo {
+            0% { background-position: 0% 0%; background-size: 100%; }
+            100% { background-position: 100% 100%; background-size: 120%; }
+        }
+
+        .fondo-banner {
+            background-color: #0f172a;
+            background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url('/img/hero-bg.jpg');
+            background-repeat: no-repeat;
+            animation: moverFondo 30s alternate infinite ease-in-out;
+        }
+
+        /* Fondo animado de la página */
+        .tech-bg-animated {
+            background-color: #0f172a;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.15) 0%, transparent 40%);
+            background-size: 200% 200%;
+            animation: gradientMovement 15s ease infinite;
+            position: relative;
+            overflow-x: hidden;
+            margin: 0;
+        }
+        @keyframes gradientMovement {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .tech-bg-animated::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+            animation: gridShift 20s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes gridShift {
+            from { transform: translateY(0); }
+            to { transform: translateY(40px); }
+        }
+
+        /* Efecto Cristal Fino */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .neon-border:hover {
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+            border-color: rgba(6, 182, 212, 0.5);
+        }
+    </style>
+    
+    <script>
+        if (!localStorage.getItem('usuario_id')) window.location.replace('login.html');
+    </script>
+</head>
+<body class="tech-bg-animated text-slate-200 min-h-screen flex flex-col relative">
+
+    <nav class="glass-panel sticky top-0 z-50 border-b border-white/10">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-shield-halved text-cyan-400 text-2xl drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]"></i>
+                <h1 class="font-black text-xl tracking-widest text-white">CATASTRO <span class="text-cyan-400">ÁGIL</span></h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <span id="userBadge" class="hidden sm:inline-block text-xs bg-slate-800/80 px-3 py-1.5 rounded-md font-mono text-cyan-300 border border-cyan-900 shadow-[0_0_10px_rgba(6,182,212,0.2)]"></span>
+                <button onclick="cerrarSesion()" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 px-4 py-1.5 rounded-lg text-sm font-bold flex items-center gap-2 transition duration-300">
+                    <i class="fa-solid fa-power-off"></i> Desconectar
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-6xl mx-auto w-full px-4 py-8 relative z-10">
+        <div class="fondo-banner rounded-2xl p-8 mb-8 border-l-4 border-l-cyan-400 border-t border-r border-b border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] relative overflow-hidden">
+            <div class="absolute right-[-20px] top-[-20px] opacity-10">
+                <i class="fa-solid fa-fingerprint text-[150px] text-cyan-100"></i>
+            </div>
+            <h2 class="text-3xl font-black uppercase tracking-tight text-white drop-shadow-md relative z-10">Bóveda Criptográfica</h2>
+            <p class="text-slate-300 text-sm mt-2 max-w-2xl relative z-10">
+                Red inmutable de resguardo territorial. Cada documento adjunto generará una firma SHA-256 única y quedará estampado en el libro mayor de Supabase.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1">
+                <div class="glass-panel p-6 rounded-2xl neon-border transition duration-300">
+                    <h3 class="text-lg font-bold mb-4 pb-3 border-b border-slate-700 flex items-center text-white">
+                        <i class="fa-solid fa-cloud-arrow-up text-cyan-400 mr-2"></i> Nuevo Bloque
+                    </h3>
+                    <form id="uploadForm" class="space-y-5">
+                        <div>
+                            <label class="block text-xs font-black uppercase text-slate-400 mb-1">Clasificación</label>
+                            <select id="categoria" class="w-full px-3 py-2.5 text-sm rounded-lg bg-slate-800 border border-slate-600 text-white outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition">
+                                <option value="Título de Propiedad Raíz">Título de Propiedad Raíz</option>
+                                <option value="Certificado de Vehículo">Certificado de Vehículo</option>
+                                <option value="Documentación Legal">Documentación Legal</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black uppercase text-slate-400 mb-1">Archivo de Origen</label>
+                            <input type="file" id="archivo" accept=".pdf, image/*" required class="w-full text-sm text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-cyan-900/30 file:text-cyan-300 hover:file:bg-cyan-900/50 cursor-pointer transition">
+                        </div>
+                        <button type="submit" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black uppercase tracking-wider py-3 rounded-lg shadow-[0_0_15px_rgba(6,182,212,0.4)] transition active:scale-95 flex justify-center items-center gap-2 text-sm">
+                            <i class="fa-solid fa-link"></i> Estampar Sello
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2">
+                <div class="glass-panel p-6 rounded-2xl neon-border transition duration-300">
+                    <h3 class="text-lg font-bold mb-4 pb-3 border-b border-slate-700 flex items-center justify-between text-white">
+                        <span><i class="fa-solid fa-server text-cyan-400 mr-2"></i> Ledger Personal</span>
+                        <span class="text-[10px] uppercase font-black text-cyan-300 bg-cyan-900/30 border border-cyan-800/50 px-3 py-1 rounded-full shadow-[0_0_8px_rgba(6,182,212,0.2)] animate-pulse">
+                            <i class="fa-solid fa-signal mr-1"></i> En Línea
+                        </span>
+                    </h3>
+                    <div id="ledger-list" class="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+                        </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/app.js"></script>
+</body>
+</html> 
+
+
